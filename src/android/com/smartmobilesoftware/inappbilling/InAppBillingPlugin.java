@@ -26,8 +26,8 @@ import android.content.Intent;
 import android.util.Log;
 
 public class InAppBillingPlugin extends CordovaPlugin {
-	private final Boolean ENABLE_DEBUG_LOGGING = true;
-	private final String TAG = "CordovaPurchase";
+ private final Boolean ENABLE_DEBUG_LOGGING = true;
+ private final String TAG = "CordovaPurchase";
  
  // Set an arbitrary request code for the purchase flow.
  static final int RC_REQUEST = 10001;
@@ -40,76 +40,76 @@ public class InAppBillingPlugin extends CordovaPlugin {
  
  CallbackContext callbackContext;
  
-	// Called by each javascript plugin function.
-	@Override public boolean execute (String action, JSONArray data, final CallbackContext callbackContext) {
-		this.callbackContext = callbackContext;
-		// Check if the action has a handler.
-		Boolean isValidAction = true;
-		
-		try {
-			// Action selector.
-			if ("init".equals(action)) {
-				final List<String> sku = new ArrayList<String>();
-				if (data.length() > 0){
-					JSONArray jsonSkuList = new JSONArray(data.getString(0));
-					int len = jsonSkuList.length();
-					Log.d (TAG, "Num SKUs Found: " + len);
-	   	for (int i = 0; i < len; i++) {
-	    	sku.add(jsonSkuList.get(i).toString());
-						Log.d (TAG, "Product SKU Added: " + jsonSkuList.get(i).toString());
-	    }
-				}
-				// Initialize.
-				init(sku);
-			} else if ("getPurchases".equals(action)) {
-				// Get the list of purchases.
-				JSONArray jsonSkuList = new JSONArray();
-				jsonSkuList = getPurchases();
-	   // Call the javascript back.
-	   callbackContext.success(jsonSkuList);
-			} else if ("buy".equals(action)) {
-				// Buy an item.
-				// Get Product Id.
-				final String sku = data.getString(0);
-    final String developerPayload = data.getString(1);
-				buy(sku, developerPayload);
-			} else if ("subscribe".equals(action)) {
-				// Subscribe to an item.
-				// Get Product Id .
-				final String sku = data.getString(0);
-    final String developerPayload = data.getString(1);
-				subscribe(sku, developerPayload);
-			} else if ("consumePurchase".equals(action)) {
-				consumePurchase(data);
-			} else if ("getAvailableProducts".equals(action)) {
-				// Get the list of purchases.
-				JSONArray jsonSkuList = new JSONArray();
-				jsonSkuList = getAvailableProducts();
-	   // Call the javascript back.
-	   callbackContext.success(jsonSkuList);
-			} else if ("getProductDetails".equals(action)) {
-				JSONArray jsonSkuList = new JSONArray(data.getString(0));
-				final List<String> sku = new ArrayList<String>();			
-				int len = jsonSkuList.length();
-				Log.d (TAG, "Num SKUs Found: "+len);
-    for (int i = 0; i < len ; i++){
-    	sku.add(jsonSkuList.get(i).toString());
-					Log.d (TAG, "Product SKU Added: " + jsonSkuList.get(i).toString());
-    }
-				getProductDetails(sku);				
-			} else {
-				// No handler for the action.
-				isValidAction = false;
-			}
-		} catch (IllegalStateException e){
-			callbackContext.error(IabHelper.ERR_UNKNOWN + "| " + e.getMessage());
-		} catch (JSONException e){
-			callbackContext.error(IabHelper.ERR_UNKNOWN + "| " + e.getMessage());
-		}
+ // Called by each javascript plugin function.
+ @Override public boolean execute (String action, JSONArray data, final CallbackContext callbackContext) {
+  this.callbackContext = callbackContext;
+  // Check if the action has a handler.
+  Boolean isValidAction = true;
   
-		// Method not found
-		return isValidAction;
-	}
+  try {
+   // Action selector.
+   if ("init".equals(action)) {
+    final List<String> sku = new ArrayList<String>();
+    if (data.length() > 0){
+     JSONArray jsonSkuList = new JSONArray(data.getString(0));
+     int len = jsonSkuList.length();
+     Log.d (TAG, "Num SKUs Found: " + len);
+     for (int i = 0; i < len; i++) {
+      sku.add(jsonSkuList.get(i).toString());
+      Log.d (TAG, "Product SKU Added: " + jsonSkuList.get(i).toString());
+     }
+    }
+    // Initialize.
+    init(sku);
+   } else if ("getPurchases".equals(action)) {
+    // Get the list of purchases.
+    JSONArray jsonSkuList = new JSONArray();
+    jsonSkuList = getPurchases();
+    // Call the javascript back.
+    callbackContext.success(jsonSkuList);
+   } else if ("buy".equals(action)) {
+    // Buy an item.
+    // Get Product Id.
+    final String sku = data.getString(0);
+    final String developerPayload = data.getString(1);
+    buy(sku, developerPayload);
+   } else if ("subscribe".equals(action)) {
+    // Subscribe to an item.
+    // Get Product Id .
+    final String sku = data.getString(0);
+    final String developerPayload = data.getString(1);
+    subscribe(sku, developerPayload);
+   } else if ("consumePurchase".equals(action)) {
+    consumePurchase(data);
+   } else if ("getAvailableProducts".equals(action)) {
+    // Get the list of purchases.
+    JSONArray jsonSkuList = new JSONArray();
+    jsonSkuList = getAvailableProducts();
+    // Call the javascript back.
+    callbackContext.success(jsonSkuList);
+   } else if ("getProductDetails".equals(action)) {
+    JSONArray jsonSkuList = new JSONArray(data.getString(0));
+    final List<String> sku = new ArrayList<String>();   
+    int len = jsonSkuList.length();
+    Log.d (TAG, "Num SKUs Found: "+len);
+    for (int i = 0; i < len ; i++){
+     sku.add(jsonSkuList.get(i).toString());
+     Log.d (TAG, "Product SKU Added: " + jsonSkuList.get(i).toString());
+    }
+    getProductDetails(sku);    
+   } else {
+    // No handler for the action.
+    isValidAction = false;
+   }
+  } catch (IllegalStateException e){
+   callbackContext.error(IabHelper.ERR_UNKNOWN + "| " + e.getMessage());
+  } catch (JSONException e){
+   callbackContext.error(IabHelper.ERR_UNKNOWN + "| " + e.getMessage());
+  }
+  
+  // Method not found
+  return isValidAction;
+ }
  
  private String getPublicKey () {
   int billingKeyFromParam = cordova.getActivity().getResources().getIdentifier("billing_key_param", "string", cordova.getActivity().getPackageName());
@@ -122,16 +122,16 @@ public class InAppBillingPlugin extends CordovaPlugin {
   return cordova.getActivity().getString(billingKey);
  }
  
-	// Initialize the plugin.
-	private void init (final List<String> skus) {
-		Log.d (TAG, "init start");
-		// Some sanity checks to see if the developer (that's you!) really followed the
+ // Initialize the plugin.
+ private void init (final List<String> skus) {
+  Log.d (TAG, "init start");
+  // Some sanity checks to see if the developer (that's you!) really followed the
   // instructions to run this plugin
   String base64EncodedPublicKey = getPublicKey();
   
-		if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) throw new RuntimeException ("Please configure your app's public key.");
+  if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) throw new RuntimeException ("Please configure your app's public key.");
   
-	 // Create the helper, passing it our context and the public key to verify signatures with
+  // Create the helper, passing it our context and the public key to verify signatures with
   Log.d (TAG, "Creating IAB helper.");
   mHelper = new IabHelper(cordova.getActivity().getApplicationContext(), base64EncodedPublicKey);
   
@@ -154,36 +154,36 @@ public class InAppBillingPlugin extends CordovaPlugin {
    
    // Hooray, IAB is fully set up. Now, let's get an inventory of stuff we own.
    if (skus.size() <= 0) {
-			 Log.d (TAG, "Setup successful. Querying inventory.");
+    Log.d (TAG, "Setup successful. Querying inventory.");
     mHelper.queryInventoryAsync(mGotInventoryListener);
-				} else {
-					Log.d (TAG, "Setup successful. Querying inventory w/SKUs.");
-					mHelper.queryInventoryAsync(true, skus, mGotInventoryListener);
-				}
-   }			
+    } else {
+     Log.d (TAG, "Setup successful. Querying inventory w/SKUs.");
+     mHelper.queryInventoryAsync(true, skus, mGotInventoryListener);
+    }
+   }   
   });
  }
-	
-	// Buy an item.
-	private void buy (final String sku, final String developerPayload) {
-		if (mHelper == null) {callbackContext.error(IabHelper.ERR_PURCHASE + "| Billing plugin was not initialized."); return;}
-		this.cordova.setActivityResultCallback(this);
-		mHelper.launchPurchaseFlow(cordova.getActivity(), sku, RC_REQUEST, mPurchaseFinishedListener, developerPayload);
-	}
-	
-	// Buy a subscription item.
-	private void subscribe (final String sku, final String developerPayload) {
-		if (mHelper == null) {callbackContext.error(IabHelper.ERR_PURCHASE + "| Billing plugin was not initialized."); return;}
-		if (!mHelper.subscriptionsSupported()) {callbackContext.error(IabHelper.ERR_SUBSCRIPTIONS_NOT_AVAILABLE + "| Subscriptions are not supported on your device yet. Sorry!"); return;}
-		this.cordova.setActivityResultCallback(this);
+ 
+ // Buy an item.
+ private void buy (final String sku, final String developerPayload) {
+  if (mHelper == null) {callbackContext.error(IabHelper.ERR_PURCHASE + "| Billing plugin was not initialized."); return;}
+  this.cordova.setActivityResultCallback(this);
+  mHelper.launchPurchaseFlow(cordova.getActivity(), sku, RC_REQUEST, mPurchaseFinishedListener, developerPayload);
+ }
+ 
+ // Buy a subscription item.
+ private void subscribe (final String sku, final String developerPayload) {
+  if (mHelper == null) {callbackContext.error(IabHelper.ERR_PURCHASE + "| Billing plugin was not initialized."); return;}
+  if (!mHelper.subscriptionsSupported()) {callbackContext.error(IabHelper.ERR_SUBSCRIPTIONS_NOT_AVAILABLE + "| Subscriptions are not supported on your device yet. Sorry!"); return;}
+  this.cordova.setActivityResultCallback(this);
   Log.d (TAG, "Launching purchase flow for subscription.");
-		mHelper.launchPurchaseFlow(cordova.getActivity(), sku, IabHelper.ITEM_TYPE_SUBS, RC_REQUEST, mPurchaseFinishedListener, developerPayload);   
-	}
-	
-	// Get the list of purchases.
-	private JSONArray getPurchases () throws JSONException {
-		// Get the list of owned items.
-		if (myInventory == null) {callbackContext.error (IabHelper.ERR_REFRESH + "| Billing plugin was not initialized."); return new JSONArray();}
+  mHelper.launchPurchaseFlow(cordova.getActivity(), sku, IabHelper.ITEM_TYPE_SUBS, RC_REQUEST, mPurchaseFinishedListener, developerPayload);   
+ }
+ 
+ // Get the list of purchases.
+ private JSONArray getPurchases () throws JSONException {
+  // Get the list of owned items.
+  if (myInventory == null) {callbackContext.error (IabHelper.ERR_REFRESH + "| Billing plugin was not initialized."); return new JSONArray();}
   
   List<Purchase>purchaseList = myInventory.getAllPurchases();
   
@@ -193,54 +193,54 @@ public class InAppBillingPlugin extends CordovaPlugin {
    JSONObject purchaseJsonObject = new JSONObject(p.getOriginalJson());
    purchaseJsonObject.put("signature", p.getSignature());
    purchaseJsonObject.put("receipt", p.getOriginalJson().toString());
-	  jsonPurchaseList.put(purchaseJsonObject);
+   jsonPurchaseList.put(purchaseJsonObject);
   }
   return jsonPurchaseList;
-	}
+ }
  
-	// Get the list of available products.
-	private JSONArray getAvailableProducts () {
-		// Get the list of owned items.
-		if (myInventory == null) {callbackContext.error(IabHelper.ERR_LOAD + "| Billing plugin was not initialized."); return new JSONArray ();}
+ // Get the list of available products.
+ private JSONArray getAvailableProducts () {
+  // Get the list of owned items.
+  if (myInventory == null) {callbackContext.error(IabHelper.ERR_LOAD + "| Billing plugin was not initialized."); return new JSONArray ();}
   List<SkuDetails>skuList = myInventory.getAllProducts();
   
-		// Convert the Java list to JSON.
-	 JSONArray jsonSkuList = new JSONArray ();
-		try {
-	  for (SkuDetails sku : skuList) {
-				Log.d (TAG, "SKUDetails: Title: "+ sku.getTitle());
-	  	jsonSkuList.put(sku.toJson());
-	  }
-		} catch (JSONException e){
-			callbackContext.error(IabHelper.ERR_LOAD + "| " + e.getMessage());
-		}
-		return jsonSkuList;
-	}
+  // Convert the Java list to JSON.
+  JSONArray jsonSkuList = new JSONArray ();
+  try {
+   for (SkuDetails sku : skuList) {
+    Log.d (TAG, "SKUDetails: Title: "+ sku.getTitle());
+    jsonSkuList.put(sku.toJson());
+   }
+  } catch (JSONException e){
+   callbackContext.error(IabHelper.ERR_LOAD + "| " + e.getMessage());
+  }
+  return jsonSkuList;
+ }
  
-	// Get SkuDetails for SKUs.
-	private void getProductDetails (final List<String> skus) {
-		if (mHelper == null) {callbackContext.error(IabHelper.ERR_LOAD + "| Billing plugin was not initialized."); return;}
-		Log.d (TAG, "Beginning Sku(s) Query!");
-		mHelper.queryInventoryAsync(true, skus, mGotDetailsListener);
-	}
-	
-	// Consume a purchase.
-	private void consumePurchase (JSONArray data) throws JSONException {
- 	if (mHelper == null) {callbackContext.error(IabHelper.ERR_FINISH + "| Did you forget to initialize the plugin?"); return;}
- 	
- 	String sku = data.getString(0);
- 	
-	 // Get the purchase from the inventory.
-	 Purchase purchase = myInventory.getPurchase(sku);
-	 if (purchase != null) {
-	 	// Consume it.
-	 	mHelper.consumeAsync(purchase, mConsumeFinishedListener);
-	 } else {
-	 	callbackContext.error(IabHelper.ERR_FINISH + "| " + sku + " is not owned so it cannot be consumed.");
-	 }
-	}
+ // Get SkuDetails for SKUs.
+ private void getProductDetails (final List<String> skus) {
+  if (mHelper == null) {callbackContext.error(IabHelper.ERR_LOAD + "| Billing plugin was not initialized."); return;}
+  Log.d (TAG, "Beginning Sku(s) Query!");
+  mHelper.queryInventoryAsync(true, skus, mGotDetailsListener);
+ }
  
-	// Listener that's called when we finish querying the items and subscriptions we own
+ // Consume a purchase.
+ private void consumePurchase (JSONArray data) throws JSONException {
+  if (mHelper == null) {callbackContext.error(IabHelper.ERR_FINISH + "| Did you forget to initialize the plugin?"); return;}
+  
+  String sku = data.getString(0);
+  
+  // Get the purchase from the inventory.
+  Purchase purchase = myInventory.getPurchase(sku);
+  if (purchase != null) {
+   // Consume it.
+   mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+  } else {
+   callbackContext.error(IabHelper.ERR_FINISH + "| " + sku + " is not owned so it cannot be consumed.");
+  }
+ }
+ 
+ // Listener that's called when we finish querying the items and subscriptions we own
  IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener () {
   public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
    Log.d (TAG, "Inside mGotInventoryListener");
@@ -348,13 +348,13 @@ public class InAppBillingPlugin extends CordovaPlugin {
  
  // We're being destroyed. It's important to dispose of the helper here!
  @Override public void onDestroy () {
- 	super.onDestroy();
+  super.onDestroy();
   
   // Very important:
   Log.d (TAG, "Destroying helper.");
   if (mHelper != null) {
-  	mHelper.dispose();
-  	mHelper = null;
+   mHelper.dispose();
+   mHelper = null;
   }
  }
 }
